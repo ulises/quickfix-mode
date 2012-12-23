@@ -25,13 +25,18 @@
     (and (not (null issue-at-point))
          (string-match-p ,regexp (flymake-ler-text issue-at-point)))))
 
-(defun quickfix-when-text-matches (regexp generator)
+(defun quickfix-when-text-matches (regexp generator-or-message)
   "Skeleton predicate for matching regexes in the text reported by flymake.
-   If the regexp matches the text then the generator is called with issue-at-point."
+   If the regexp matches the text then if the generator is a function, it
+   is called with issue-at-point. Otherwise the string is returned."
+  (or (stringp generator-or-message)
+      (functionp generator-or-message)
+      (error "generator-or-message must be either a function or a string."))
   `(lambda (issue-at-point)
     (let ((matcher (quickfix-match-regex ,regexp)))
       (when (funcall matcher issue-at-point)
-        (funcall ,generator issue-at-point)))))
+        (cond ((stringp ,generator-or-message) ,generator-or-message)
+              ((functionp ,generator-or-message) (funcall ,generator-or-message issue-at-point)))))))
 
 (defvar quickfix-mode-hook nil)
 
