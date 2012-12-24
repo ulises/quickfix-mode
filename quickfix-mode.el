@@ -107,4 +107,18 @@
   :init-value nil
   :lighter " QF")
 
+(defun quickfix-mode-maybe ()
+  "Used to turn on the globalized minor mode."
+  (and (buffer-file-name)
+       (flymake-get-file-name-mode-and-masks
+        (buffer-file-name))
+       (quickfix-mode 1)))
+
+(define-globalized-minor-mode quickfix-global-mode
+  quickfix-mode quickfix-mode-maybe
+  :group 'quickfix-mode
+  :require 'quickfix-mode)
+
+
 (provide 'quickfix-mode)
+;;; quickfix-mode.el ends here
