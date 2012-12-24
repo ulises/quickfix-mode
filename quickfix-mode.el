@@ -1,8 +1,5 @@
 (require 'popup)
 
-(defvar quickfix-modes '()
-  "List of major modes for which quickfix should be active.")
-
 ;;; Helper functions
 
 ;; from http://emacswiki.org/emacs/ElispCookbook
@@ -50,21 +47,34 @@
     map)
   "Keymap from quickfix minor mode")
 
-(defvar quickfix-mode-handlers
-  (make-hash-table :test 'equal)
-  "Set of handlers for the flymake issue-at-point. A handler is a pair of predicate-fn
-   and handler-fn. The predicate should return a description of the proposed change or
-   nil. Both the predicate and handler fns take as parameter the issue-at-point which
-   looks something like:
-   [cl-struct-flymake-ler nil 44 \"e\" \"function bar/2 undefined\"
-   \"~/development/erlang/sandbox.erl\"].")
+(defvar quickfix-mode-handlers '((t . nil))
+  "Set of handlers for the flymake issue-at-point.
+This is an Association List where keys are major modes and the
+values are list of conses where the car is the predicate and the
+cdr is the handler.  Predicates and handler for all modes are
+registered under the t key.")
 
-(defun quickfix-add-handler (predicate handler)
-  (print predicate)
-  (print handler)
-  (print quickfix-mode-handlers)
-  (puthash predicate handler quickfix-mode-handlers)
-  "Register a handler for quickfixing issues.")
+(defun quickfix-add-handler (predicate handler &optional modes)
+  "Register quickfix using PREDICATE and HANDLER.
+Optional Argument MODES can be a symbol or a list of symbols
+matching modes for which this quickfix should be registered to.
+When no MODES is provided the PREDICATE check is issued for all
+modes."
+  (and modes (symbolp modes) (setq modes (list modes)))
+  (if modes
+      (dolist (mode modes)
+        (let ((alist (assq mode quickfix-mode-handlers)))
+          (if (not alist)
+              (add-to-list
+               'quickfix-mode-handlers
+               (cons mode (list (cons predicate handler))))
+            (setcdr alist
+                    (cons (cons predicate handler)
+                          (cdr alist))))))
+    (let ((alist (assq t quickfix-mode-handlers)))
+      (setcdr alist
+              (cons (cons predicate handler)
+                    (cdr alist))))))
 
 (defun quickfix-at-point ()
   "Pops up a list of available actions to handle the issue at point.
@@ -75,20 +85,20 @@
                    (quickfix-get-handlers issue-at-point))))
     (when handler (funcall handler issue-at-point))))
 
-(defun quickfix-major-mode-is-registered ()
-  "Checks whether the buffer's major mode is active to quickfix."
-  (quickfix-filter (lambda (mode) (equal mode major-mode)) quickfix-modes))
-
 (defun quickfix-get-handlers (issue-at-point)
   "Returns a list of handlers for issue-at-point and their descriptions."
-  (when (quickfix-major-mode-is-registered)
-    (let ((handlers '()))
-      (maphash (lambda (predicate handler)
-                 (let ((description (funcall predicate issue-at-point)))
-                   (when description
-                     (setq handlers (cons (list description handler) handlers)))))
-               quickfix-mode-handlers)
-      handlers)))
+  (let ((handlers))
+    (mapc (lambda (predicate-handler)
+            (let ((description
+                   (funcall (car predicate-handler) issue-at-point)))
+              (and description
+                   (setq handlers
+                         (cons (list description
+                                     (cdr predicate-handler))
+                               handlers)))))
+          (append (cdr (assq t quickfix-mode-handlers))
+                  (cdr (assq major-mode quickfix-mode-handlers)) nil))
+    handlers))
 
 (defun quickfix-popup-and-get-selected-handler (handlers)
   "Pops up a menu with the potential fixes and lets the user choose one. Returns the selected handler fn"
