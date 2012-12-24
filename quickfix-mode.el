@@ -41,6 +41,7 @@
         (cond ((stringp ,generator-or-message) ,generator-or-message)
               ((functionp ,generator-or-message) (funcall ,generator-or-message issue-at-point)))))))
 
+;; actualy mode stuff
 (defvar quickfix-mode-hook nil)
 
 (defvar quickfix-mode-map
@@ -83,19 +84,19 @@
   (when (quickfix-major-mode-is-registered)
     (let ((handlers '()))
       (maphash (lambda (predicate handler)
-		 (let ((description (funcall predicate issue-at-point)))
-		   (when description
-		     (setq handlers (cons (list description handler) handlers)))))
-	       quickfix-mode-handlers)
+                 (let ((description (funcall predicate issue-at-point)))
+                   (when description
+                     (setq handlers (cons (list description handler) handlers)))))
+               quickfix-mode-handlers)
       handlers)))
 
 (defun quickfix-popup-and-get-selected-handler (handlers)
   "Pops up a menu with the potential fixes and lets the user choose one. Returns the selected handler fn"
   (let* ((menu-entries (mapcar 'car handlers))
-	 (selected (when menu-entries
-		     (save-excursion
-		       (end-of-line)
-		       (popup-menu* menu-entries)))))
+         (selected (when menu-entries
+                     (save-excursion
+                       (end-of-line)
+                       (popup-menu* menu-entries)))))
     (car (quickfix-filter 'identity
                  (mapcar (lambda (handler)
                            (when (equal selected (car handler))
