@@ -121,4 +121,4 @@
 
 
 (provide 'quickfix-mode)
-;;; quickfix-python.el ends here
+;;; quickfix-mode.el ends here
