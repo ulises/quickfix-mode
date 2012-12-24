@@ -1,9 +1,12 @@
 (require 'popup)
 
+(defvar quickfix-modes '()
+  "List of major modes for which quickfix should be active.")
+
 ;;; Helper functions
 
 ;; from http://emacswiki.org/emacs/ElispCookbook
-(defun filter (condp lst)
+(defun quickfix-filter (condp lst)
   (delq nil
         (mapcar (lambda (x) (and (funcall condp x) x)) lst)))
 
@@ -38,6 +41,7 @@
         (cond ((stringp ,generator-or-message) ,generator-or-message)
               ((functionp ,generator-or-message) (funcall ,generator-or-message issue-at-point)))))))
 
+;; actualy mode stuff
 (defvar quickfix-mode-hook nil)
 
 (defvar quickfix-mode-map
@@ -71,21 +75,29 @@
                    (quickfix-get-handlers issue-at-point))))
     (when handler (funcall handler issue-at-point))))
 
+(defun quickfix-major-mode-is-registered ()
+  "Checks whether the buffer's major mode is active to quickfix."
+  (quickfix-filter (lambda (mode) (equal mode major-mode)) quickfix-modes))
+
 (defun quickfix-get-handlers (issue-at-point)
   "Returns a list of handlers for issue-at-point and their descriptions."
-  (let ((handlers '()))
-    (maphash (lambda (predicate handler)
-               (let ((description (funcall predicate issue-at-point)))
-                 (when description
-                   (setq handlers (cons (list description handler) handlers)))))
-             quickfix-mode-handlers)
-    handlers))
+  (when (quickfix-major-mode-is-registered)
+    (let ((handlers '()))
+      (maphash (lambda (predicate handler)
+                 (let ((description (funcall predicate issue-at-point)))
+                   (when description
+                     (setq handlers (cons (list description handler) handlers)))))
+               quickfix-mode-handlers)
+      handlers)))
 
 (defun quickfix-popup-and-get-selected-handler (handlers)
   "Pops up a menu with the potential fixes and lets the user choose one. Returns the selected handler fn"
   (let* ((menu-entries (mapcar 'car handlers))
-         (selected (when menu-entries (popup-menu* menu-entries))))
-    (car (filter 'identity
+         (selected (when menu-entries
+                     (save-excursion
+                       (end-of-line)
+                       (popup-menu* menu-entries)))))
+    (car (quickfix-filter 'identity
                  (mapcar (lambda (handler)
                            (when (equal selected (car handler))
                              (car (cdr handler)))) handlers)))))
