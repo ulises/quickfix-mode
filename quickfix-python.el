@@ -20,8 +20,7 @@
 (defvar quickfix-python-mixed-tabs-and-spaces-predicate
   (quickfix-when-text-matches
    "\\(?:E101 indentation contains mixed spaces and tabs\\|W191 indentation contains tabs\\)"
-   (lambda (issue-at-point)
-     "Indent with spaces only.")))
+   "Indent with spaces only."))
 
 (quickfix-add-handler quickfix-python-mixed-tabs-and-spaces-predicate 'quickfix-python-mixed-tabs-and-spaces)
 
@@ -33,8 +32,7 @@
 (defvar quickfix-python-line-too-long-predicate
   (quickfix-when-text-matches
    "\\(?:E501 line too long\\|Line too long \\)"
-   (lambda (issue-at-point)
-     "Jump to 79th char.")))
+   "Jump to 79th char."))
 
 (quickfix-add-handler quickfix-python-line-too-long-predicate 'quickfix-python-line-too-long)
 
@@ -46,8 +44,7 @@
 (defvar quickfix-python-trailing-whitespace-predicate
   (quickfix-when-text-matches
    "\\(?:W291 trailing whitespace\\|W293 blank line contains whitespace\\)"
-   (lambda (issue-at-point)
-     "Delete trailing whitespace.")))
+   "Delete trailing whitespace."))
 
 (quickfix-add-handler quickfix-python-trailing-whitespace-predicate 'quickfix-python-trailing-whitespace)
 
@@ -122,8 +119,7 @@
 (defvar quickfix-python-backticks-predicate
   (quickfix-when-text-matches
    quickfix-python-backticks-regexp
-   (lambda (issue-at-point)
-     (format "Replace backticks with repr()"))))
+   "Replace backticks with repr()"))
 
 (quickfix-add-handler quickfix-python-backticks-predicate 'quickfix-python-backticks)
 
@@ -143,10 +139,17 @@
 (defvar quickfix-python-not-equal-comparison-predicate
   (quickfix-when-text-matches
    quickfix-python-not-equal-comparison-regexp
-   (lambda (issue-at-point)
-     (format "Replace <> with !="))))
+   "Replace <> with !="))
 
 (quickfix-add-handler quickfix-python-not-equal-comparison-predicate 'quickfix-python-not-equal-comparison)
 
+(add-to-list 'quickfix-modes 'python-mode)
 
-(require 'quickfix-python)
+
+(provide 'quickfix-python)
+;; Local Variables:
+;; coding: utf-8
+;; indent-tabs-mode: nil
+;; End:
+
+;;; quickfix-python.el ends here
