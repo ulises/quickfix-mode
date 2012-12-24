@@ -75,9 +75,9 @@
 
 ;; registering handlers
 (quickfix-add-handler quickfix-erlang-undefined-fn-predicate
-                      'quickfix-erlang-undefined-fn-handler)
+                      'quickfix-erlang-undefined-fn-handler
+                      'erlang-mode)
 
 (quickfix-add-handler quickfix-erlang-unused-fn-predicate
-                      'quickfix-erlang-unused-fn-handler)
-
-(add-to-list 'quickfix-modes 'erlang-mode)
+                      'quickfix-erlang-unused-fn-handler
+                      'erlang-mode)
