@@ -22,7 +22,10 @@
    "\\(?:E101 indentation contains mixed spaces and tabs\\|W191 indentation contains tabs\\)"
    "Indent with spaces only."))
 
-(quickfix-add-handler quickfix-python-mixed-tabs-and-spaces-predicate 'quickfix-python-mixed-tabs-and-spaces)
+(quickfix-add-handler
+ quickfix-python-mixed-tabs-and-spaces-predicate
+ 'quickfix-python-mixed-tabs-and-spaces
+ 'python-mode)
 
 
 (defun quickfix-python-line-too-long (issue-at-point)
@@ -34,7 +37,10 @@
    "\\(?:E501 line too long\\|Line too long \\)"
    "Jump to 79th char."))
 
-(quickfix-add-handler quickfix-python-line-too-long-predicate 'quickfix-python-line-too-long)
+(quickfix-add-handler
+ quickfix-python-line-too-long-predicate
+ 'quickfix-python-line-too-long
+ 'python-mode)
 
 
 (defun quickfix-python-trailing-whitespace (issue-at-point)
@@ -46,7 +52,10 @@
    "\\(?:W291 trailing whitespace\\|W293 blank line contains whitespace\\)"
    "Delete trailing whitespace."))
 
-(quickfix-add-handler quickfix-python-trailing-whitespace-predicate 'quickfix-python-trailing-whitespace)
+(quickfix-add-handler
+ quickfix-python-trailing-whitespace-predicate
+ 'quickfix-python-trailing-whitespace
+ 'python-mode)
 
 
 (defvar quickfix-python-expected-newlines-regexp
@@ -73,7 +82,10 @@
             (quickfix-python-expected-newlines-get-num-lines issue-at-point)))
        (format "Add %s newline%s." num-lines (if (> num-lines 1) "s" ""))))))
 
-(quickfix-add-handler quickfix-python-expected-newlines-predicate 'quickfix-python-expected-newlines)
+(quickfix-add-handler
+ quickfix-python-expected-newlines-predicate
+ 'quickfix-python-expected-newlines
+ 'python-mode)
 
 
 (defvar quickfix-python-too-many-newlines-regexp
@@ -100,7 +112,10 @@
             (quickfix-python-too-many-newlines-get-num-lines issue-at-point)))
        (format "Remove %s newline%s." num-lines (if (> num-lines 1) "s" ""))))))
 
-(quickfix-add-handler quickfix-python-too-many-newlines-predicate 'quickfix-python-too-many-newlines)
+(quickfix-add-handler
+ quickfix-python-too-many-newlines-predicate
+ 'quickfix-python-too-many-newlines
+ 'python-mode)
 
 
 (defvar quickfix-python-backticks-regexp
@@ -121,7 +136,10 @@
    quickfix-python-backticks-regexp
    "Replace backticks with repr()"))
 
-(quickfix-add-handler quickfix-python-backticks-predicate 'quickfix-python-backticks)
+(quickfix-add-handler
+ quickfix-python-backticks-predicate
+ 'quickfix-python-backticks
+ 'python-mode)
 
 
 (defvar quickfix-python-not-equal-comparison-regexp
@@ -141,9 +159,10 @@
    quickfix-python-not-equal-comparison-regexp
    "Replace <> with !="))
 
-(quickfix-add-handler quickfix-python-not-equal-comparison-predicate 'quickfix-python-not-equal-comparison)
-
-(add-to-list 'quickfix-modes 'python-mode)
+(quickfix-add-handler
+ quickfix-python-not-equal-comparison-predicate
+ 'quickfix-python-not-equal-comparison
+ 'python-mode)
 
 
 (provide 'quickfix-python)
