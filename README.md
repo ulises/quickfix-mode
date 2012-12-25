@@ -51,3 +51,7 @@ then require the mode:
 To add the erlang handlers simply load the file:
 
 ``(load-file "/path/to/quickfix-mode/quickfix-erlang.el")``
+
+### Marmalade ###
+
+Soon to come. Stay tuned.
