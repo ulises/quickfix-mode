@@ -48,9 +48,13 @@ then require the mode:
 
 ``(require 'quickfix-mode)``
 
-To add the erlang handlers simply load the file:
+To add the erlang (or python) handlers simply load the corresponding file:
 
 ``(load-file "/path/to/quickfix-mode/quickfix-erlang.el")``
+
+or
+
+``(load-file "/path/to/quickfix-mode/quickfix-python.el")``
 
 ### Marmalade ###
 
