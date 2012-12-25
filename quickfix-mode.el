@@ -1,3 +1,11 @@
+;;; quickfix-mode.el
+;;; Copyright 2012 Ulises Cervino Beresi
+;;; URL: https://github.com/ulises/quickfix-mode
+;;; Version: 0.0.1
+;;; Package-Requires: '((flymake 0.4.13)(popup 0.5))
+
+(require 'cl)
+(require 'flymake)
 (require 'popup)
 
 ;;; Helper functions

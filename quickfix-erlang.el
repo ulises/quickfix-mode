@@ -1,3 +1,9 @@
+;;; quickfix-erlang.el
+;;; Copyright 2012 Ulises Cervino Beresi
+;;; URL: https://github.com/ulises/quickfix-mode
+;;; Version: 0.0.1
+;;; Package-Requires: '((quickfix-mode 0.0.1))
+
 (require 'quickfix-mode)
 
 (defvar quickfix-erlang-generic-fn-re
@@ -81,3 +87,5 @@
 (quickfix-add-handler quickfix-erlang-unused-fn-predicate
                       'quickfix-erlang-unused-fn-handler
                       'erlang-mode)
+
+;;; quickfix-erlang.el ends here
