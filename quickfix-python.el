@@ -23,8 +23,8 @@
    "Indent with spaces only."))
 
 (quickfix-add-handler
- quickfix-python-mixed-tabs-and-spaces-predicate
- 'quickfix-python-mixed-tabs-and-spaces
+ (quickfix-make-handler quickfix-python-mixed-tabs-and-spaces-predicate
+                        'quickfix-python-mixed-tabs-and-spaces)
  'python-mode)
 
 
@@ -38,8 +38,8 @@
    "Jump to 79th char."))
 
 (quickfix-add-handler
- quickfix-python-line-too-long-predicate
- 'quickfix-python-line-too-long
+ (quickfix-make-handler quickfix-python-line-too-long-predicate
+                        'quickfix-python-line-too-long)
  'python-mode)
 
 
@@ -53,8 +53,8 @@
    "Delete trailing whitespace."))
 
 (quickfix-add-handler
- quickfix-python-trailing-whitespace-predicate
- 'quickfix-python-trailing-whitespace
+ (quickfix-make-handler quickfix-python-trailing-whitespace-predicate
+                        'quickfix-python-trailing-whitespace)
  'python-mode)
 
 
@@ -83,8 +83,8 @@
        (format "Add %s newline%s." num-lines (if (> num-lines 1) "s" ""))))))
 
 (quickfix-add-handler
- quickfix-python-expected-newlines-predicate
- 'quickfix-python-expected-newlines
+ (quickfix-make-handler quickfix-python-expected-newlines-predicate
+                        'quickfix-python-expected-newlines)
  'python-mode)
 
 
@@ -113,8 +113,8 @@
        (format "Remove %s newline%s." num-lines (if (> num-lines 1) "s" ""))))))
 
 (quickfix-add-handler
- quickfix-python-too-many-newlines-predicate
- 'quickfix-python-too-many-newlines
+ (quickfix-make-handler quickfix-python-too-many-newlines-predicate
+                        'quickfix-python-too-many-newlines)
  'python-mode)
 
 
@@ -137,8 +137,8 @@
    "Replace backticks with repr()"))
 
 (quickfix-add-handler
- quickfix-python-backticks-predicate
- 'quickfix-python-backticks
+ (quickfix-make-handler quickfix-python-backticks-predicate
+                        'quickfix-python-backticks)
  'python-mode)
 
 
@@ -160,8 +160,8 @@
    "Replace <> with !="))
 
 (quickfix-add-handler
- quickfix-python-not-equal-comparison-predicate
- 'quickfix-python-not-equal-comparison
+ (quickfix-make-handler quickfix-python-not-equal-comparison-predicate
+                        'quickfix-python-not-equal-comparison)
  'python-mode)
 
 

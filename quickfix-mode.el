@@ -46,7 +46,8 @@
         (cond ((stringp ,generator-or-message) ,generator-or-message)
               ((functionp ,generator-or-message) (funcall ,generator-or-message issue-at-point)))))))
 
-;; actualy mode stuff
+;; actual mode stuff
+
 (defvar quickfix-mode-hook nil)
 
 (defvar quickfix-mode-map
@@ -56,18 +57,16 @@
   "Keymap from quickfix minor mode")
 
 (defvar quickfix-mode-handlers '((t . nil))
-  "Set of handlers for the flymake issue-at-point.
-This is an Association List where keys are major modes and the
-values are list of conses where the car is the predicate and the
-cdr is the handler.  Predicates and handler for all modes are
-registered under the t key.")
+  "Set of handlers for the flymake issue-at-point. This is an Association List
+where keys are major modes and the values are list of handlers (see
+defhandler for the definition of handlers.) Handlers for all
+modes are registered under the t key.")
 
-(defun quickfix-add-handler (predicate handler &optional modes)
-  "Register quickfix using PREDICATE and HANDLER.
+(defun quickfix-add-handler (handler &optional modes)
+  "Register quickfix using HANDLER.
 Optional Argument MODES can be a symbol or a list of symbols
 matching modes for which this quickfix should be registered to.
-When no MODES is provided the PREDICATE check is issued for all
-modes."
+When no MODES is provided the handler is registered for all major-modes."
   (and modes (symbolp modes) (setq modes (list modes)))
   (if modes
       (dolist (mode modes)
@@ -75,14 +74,24 @@ modes."
           (if (not alist)
               (add-to-list
                'quickfix-mode-handlers
-               (cons mode (list (cons predicate handler))))
-            (setcdr alist
-                    (cons (cons predicate handler)
-                          (cdr alist))))))
+               (cons mode (list handler)))
+            (setcdr alist (cons handler (cdr alist))))))
     (let ((alist (assq t quickfix-mode-handlers)))
       (setcdr alist
-              (cons (cons predicate handler)
-                    (cdr alist))))))
+              (cons handler (cdr alist))))))
+
+(defmacro quickfix-make-handler (predicate handler &optional docstring)
+  "Defines a quickfix handler. A handler is a function which will receive an
+issue-at-point and return either a menu item with the description of the
+quickfix and handling function or nil. The handling function takes the
+issue-at-point as argument. Its return value is ignored. This function takes
+the individual components (the predicate and handling code) and builds
+such function."
+  `(lambda (issue-at-point)
+     (let ((message (funcall ,predicate issue-at-point)))
+       (when message
+         (popup-make-item message :value ,handler
+                          :document (or ,docstring "No documentation."))))))
 
 (defun quickfix-at-point ()
   "Pops up a list of available actions to handle the issue at point.
@@ -95,30 +104,20 @@ modes."
 
 (defun quickfix-get-handlers (issue-at-point)
   "Returns a list of handlers for issue-at-point and their descriptions."
-  (let ((handlers))
-    (mapc (lambda (predicate-handler)
-            (let ((description
-                   (funcall (car predicate-handler) issue-at-point)))
-              (and description
-                   (setq handlers
-                         (cons (list description
-                                     (cdr predicate-handler))
-                               handlers)))))
-          (append (cdr (assq t quickfix-mode-handlers))
-                  (cdr (assq major-mode quickfix-mode-handlers)) nil))
-    handlers))
+  (quickfix-filter
+   'identity
+   (mapcar (lambda (handler)
+             (funcall handler issue-at-point))
+           (append (cdr (assq t quickfix-mode-handlers))
+                   (cdr (assq major-mode quickfix-mode-handlers))
+                   nil))))
 
 (defun quickfix-popup-and-get-selected-handler (handlers)
   "Pops up a menu with the potential fixes and lets the user choose one. Returns the selected handler fn"
-  (let* ((menu-entries (mapcar 'car handlers))
-         (selected (when menu-entries
-                     (save-excursion
-                       (end-of-line)
-                       (popup-menu* menu-entries)))))
-    (car (quickfix-filter 'identity
-                 (mapcar (lambda (handler)
-                           (when (equal selected (car handler))
-                             (car (cdr handler)))) handlers)))))
+  (when handlers
+    (save-excursion
+      (end-of-line)
+      (popup-menu* handlers))))
 
 (define-minor-mode quickfix-mode
   "Quickfix is a minor mode dependent on flymake-mode"
