@@ -38,7 +38,7 @@
   (if (<= n 0) (mapconcat 'identity acc ",")
     (quickfix-erlang-generic-arguments- (- n 1) (cons (format "_Arg%d" n) acc))))
 
-(defun quickfix-erlang-undefined-fn-handler (issue-at-point)
+(defun quickfix-erlang-undefined-fn-fix (issue-at-point)
   (interactive)
   (let* ((name-and-arity (quickfix-erlang-get-undefined-function-name-and-arity issue-at-point))
          (fn-name (car name-and-arity))
@@ -57,7 +57,7 @@
     (beginning-of-line)
     (search-forward "(")))
 
-(defun quickfix-erlang-unused-fn-handler (issue-at-point)
+(defun quickfix-erlang-unused-fn-fix (issue-at-point)
   (save-excursion
     (interactive)
     (let* ((name-and-arity (quickfix-erlang-get-undefined-function-name-and-arity issue-at-point))
@@ -80,12 +80,19 @@
 
 
 ;; registering handlers
-(quickfix-add-handler quickfix-erlang-undefined-fn-predicate
-                      'quickfix-erlang-undefined-fn-handler
-                      'erlang-mode)
 
-(quickfix-add-handler quickfix-erlang-unused-fn-predicate
-                      'quickfix-erlang-unused-fn-handler
-                      'erlang-mode)
+(defvar quickfix-erlang-undefined-fn-handler
+  (quickfix-make-handler quickfix-erlang-undefined-fn-predicate
+                         'quickfix-erlang-undefined-fn-fix))
+
+(defvar quickfix-erlang-unused-fn-handler
+  (quickfix-make-handler quickfix-erlang-unused-fn-predicate
+                         'quickfix-erlang-unused-fn-fix))
+
+(quickfix-add-handler
+ quickfix-erlang-undefined-fn-handler 'erlang-mode)
+
+(quickfix-add-handler
+ quickfix-erlang-unused-fn-handler 'erlang-mode)
 
 ;;; quickfix-erlang.el ends here
