@@ -1,8 +1,18 @@
-;;; quickfix-mode.el
-;;; Copyright 2012 Ulises Cervino Beresi
+;;; quickfix-mode.el --- a mode for quickfixing common programming errors
+
+;; Copyright (C) 2012-2013 Ulises Cervino Beresi
+
+;; Author: Ulises Cervino Beresi <ulises.cervino@gmail.com>
+;; Created: 21 Dec 2012
+;; Keywords: languages
+
+;; This file is not part of GNU Emacs.
+
 ;;; URL: https://github.com/ulises/quickfix-mode
-;;; Version: 0.0.1
-;;; Package-Requires: '((flymake 0.4.13)(popup 0.5))
+;; Version: 0.0.1
+;; Package-Requires: '((flymake 0.4.13)(popup 0.5))
+
+;;; Code
 
 (require 'cl)
 (require 'flymake)

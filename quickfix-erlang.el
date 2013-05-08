@@ -1,8 +1,18 @@
-;;; quickfix-erlang.el
-;;; Copyright 2012 Ulises Cervino Beresi
-;;; URL: https://github.com/ulises/quickfix-mode
-;;; Version: 0.0.1
-;;; Package-Requires: '((quickfix-mode 0.0.1))
+;;; quickfix-erlang.el --- erlang fixes for quickfix-mode
+
+;; Copyright (C) 2012-2013 Ulises Cervino Beresi
+
+;; Author: Ulises Cervino Beresi <ulises.cervino@gmail.com>
+;; Created: 21 Dec 2012
+;; Keywords: languages
+
+;; This file is not part of GNU Emacs.
+
+;; URL: https://github.com/ulises/quickfix-mode
+;; Version: 0.0.1
+;; Package-Requires: '((quickfix-mode 0.0.1))
+
+;;; Code
 
 (require 'quickfix-mode)
 

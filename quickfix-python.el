@@ -7,8 +7,6 @@
 (require 'python)
 (require 'quickfix-mode)
 
-
-
 (defun quickfix-python-mixed-tabs-and-spaces (issue-at-point)
   (interactive)
   (let ((from (line-beginning-position))
@@ -27,7 +25,7 @@
                         'quickfix-python-mixed-tabs-and-spaces)
  'python-mode)
 
-
+
 (defun quickfix-python-line-too-long (issue-at-point)
   (interactive)
   (goto-char (+ (line-beginning-position) 79)))
@@ -42,7 +40,7 @@
                         'quickfix-python-line-too-long)
  'python-mode)
 
-
+
 (defun quickfix-python-trailing-whitespace (issue-at-point)
   (interactive)
   (delete-trailing-whitespace (line-beginning-position) (line-end-position)))
@@ -57,7 +55,7 @@
                         'quickfix-python-trailing-whitespace)
  'python-mode)
 
-
+
 (defvar quickfix-python-expected-newlines-regexp
   "E30[12] expected \\([12]\\) blank lines?, found \\([01]\\)")
 
@@ -87,7 +85,7 @@
                         'quickfix-python-expected-newlines)
  'python-mode)
 
-
+
 (defvar quickfix-python-too-many-newlines-regexp
   "E303 too many blank lines (\\([0-9]+\\))")
 
@@ -117,7 +115,7 @@
                         'quickfix-python-too-many-newlines)
  'python-mode)
 
-
+
 (defvar quickfix-python-backticks-regexp
   "^W604 backticks are deprecated, use 'repr()'")
 
@@ -141,7 +139,7 @@
                         'quickfix-python-backticks)
  'python-mode)
 
-
+
 (defvar quickfix-python-not-equal-comparison-regexp
   "\\(?:W603 '<>' is deprecated, use '!='\\|Use of the <> operator\\)")
 
