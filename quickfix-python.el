@@ -4,6 +4,9 @@
 ;; default in stock Emacs 24.3 or at
 ;; https://github.com/fgallina/python.el).
 
+;;; Code
+;; License: GNU General Public License version 3, or (at your option) any later version
+
 (require 'python)
 (require 'quickfix-mode)
 

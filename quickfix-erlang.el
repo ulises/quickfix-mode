@@ -14,6 +14,8 @@
 
 ;;; Code
 
+;; License: GNU General Public License version 3, or (at your option) any later version
+
 (require 'quickfix-mode)
 
 (defvar quickfix-erlang-generic-fn-re

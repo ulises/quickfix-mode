@@ -13,6 +13,7 @@
 ;; Package-Requires: '((flymake 0.4.13)(popup 0.5))
 
 ;;; Code
+;; License: GNU General Public License version 3, or (at your option) any later version
 
 (require 'cl)
 (require 'flymake)
